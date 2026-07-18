@@ -660,6 +660,153 @@ input:focus-visible {
 .dialogue-box__line { position: absolute; left: -1px; top: 24px; bottom: 24px; width: 1px; background: linear-gradient(transparent, rgba(216, 218, 210, 0.65), transparent); }
 .dialogue-box__speaker { min-height: 19px; margin: 0 0 12px; color: rgba(187, 205, 210, 0.76); font-size: 12px; font-weight: 500; letter-spacing: 0.28em; }
 .dialogue-box__text { margin: 0; color: rgba(245, 241, 231, 0.93); font-family: var(--serif); font-size: clamp(17px, 1.45vw, 22px); line-height: 1.9; letter-spacing: 0.075em; text-shadow: 0 2px 12px #000; }
+
+/*
+ * 双主角对白框
+ * 不使用完整矩形描边，而以不对称玻璃渐隐层建立左右视角。
+ */
+.dialogue-box--zhou,
+.dialogue-box--lin {
+  width: min(700px, 51vw);
+  min-height: 142px;
+  border: 0;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(18px) saturate(0.72);
+  -webkit-backdrop-filter: blur(18px) saturate(0.72);
+}
+
+.dialogue-box--zhou::before,
+.dialogue-box--lin::before,
+.dialogue-box--zhou::after,
+.dialogue-box--lin::after {
+  content: "";
+  position: absolute;
+  height: 1px;
+  pointer-events: none;
+}
+
+.dialogue-box--zhou {
+  margin-right: auto;
+  margin-left: clamp(4px, 3.5vw, 56px);
+  padding: 29px 66px 34px 44px;
+  background:
+    linear-gradient(101deg, rgba(5, 14, 22, 0.94) 0%, rgba(7, 17, 25, 0.82) 54%, rgba(10, 21, 28, 0.38) 78%, rgba(10, 21, 28, 0) 100%),
+    radial-gradient(circle at 12% 12%, rgba(100, 148, 174, 0.11), transparent 42%);
+}
+
+.dialogue-box--zhou::before {
+  top: 0;
+  left: 0;
+  width: 46%;
+  background: linear-gradient(90deg, rgba(152, 186, 201, 0.64), rgba(152, 186, 201, 0));
+}
+
+.dialogue-box--zhou::after {
+  bottom: 0;
+  left: 0;
+  width: 68%;
+  background: linear-gradient(90deg, rgba(101, 137, 153, 0.22), rgba(101, 137, 153, 0));
+}
+
+.dialogue-box--lin {
+  margin-right: clamp(4px, 3.5vw, 56px);
+  margin-left: auto;
+  padding: 29px 44px 34px 66px;
+  background:
+    linear-gradient(259deg, rgba(24, 22, 18, 0.94) 0%, rgba(24, 22, 19, 0.82) 54%, rgba(25, 23, 20, 0.38) 78%, rgba(25, 23, 20, 0) 100%),
+    radial-gradient(circle at 88% 12%, rgba(186, 157, 106, 0.1), transparent 42%);
+}
+
+.dialogue-box--lin::before {
+  top: 0;
+  right: 0;
+  width: 46%;
+  background: linear-gradient(270deg, rgba(199, 181, 142, 0.56), rgba(199, 181, 142, 0));
+}
+
+.dialogue-box--lin::after {
+  right: 0;
+  bottom: 0;
+  width: 68%;
+  background: linear-gradient(270deg, rgba(160, 139, 101, 0.2), rgba(160, 139, 101, 0));
+}
+
+.dialogue-box--zhou .dialogue-box__line,
+.dialogue-box--lin .dialogue-box__line {
+  top: 31px;
+  bottom: auto;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+}
+
+.dialogue-box--zhou .dialogue-box__line {
+  left: 27px;
+  background: #9bb9c7;
+  box-shadow: 0 0 12px rgba(132, 177, 198, 0.7);
+}
+
+.dialogue-box--lin .dialogue-box__line {
+  right: 27px;
+  left: auto;
+  background: #c8b58b;
+  box-shadow: 0 0 12px rgba(200, 174, 119, 0.62);
+}
+
+.dialogue-box--zhou .dialogue-box__speaker,
+.dialogue-box--lin .dialogue-box__speaker {
+  display: flex;
+  align-items: center;
+  min-height: 17px;
+  margin-bottom: 14px;
+  font-family: var(--serif);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+}
+
+.dialogue-box--zhou .dialogue-box__speaker {
+  color: rgba(174, 204, 216, 0.86);
+}
+
+.dialogue-box--zhou .dialogue-box__speaker::after {
+  content: "ZHOU YU / 24";
+  margin-left: 14px;
+  color: rgba(152, 181, 192, 0.3);
+  font-family: Georgia, serif;
+  font-size: 7px;
+  letter-spacing: 0.25em;
+}
+
+.dialogue-box--lin .dialogue-box__speaker {
+  justify-content: flex-end;
+  color: rgba(213, 198, 164, 0.84);
+  text-align: right;
+}
+
+.dialogue-box--lin .dialogue-box__speaker::before {
+  content: "LIN ZHI / 23";
+  margin-right: 14px;
+  color: rgba(194, 177, 141, 0.3);
+  font-family: Georgia, serif;
+  font-size: 7px;
+  letter-spacing: 0.25em;
+}
+
+.dialogue-box--zhou .dialogue-box__text {
+  padding-right: 6%;
+}
+
+.dialogue-box--lin .dialogue-box__text {
+  padding-left: 6%;
+  text-align: right;
+}
+
+.dialogue-box--lin .dialogue-box__continue {
+  right: auto;
+  left: 22px;
+}
+
 .dialogue-box--narration { width: auto; min-width: min(560px, 84vw); border-color: transparent; background: rgba(3, 8, 12, 0.28); text-align: center; backdrop-filter: blur(5px); box-shadow: none; }
 .dialogue-box--narration .dialogue-box__speaker { display: none; }
 .dialogue-box--narration .dialogue-box__line { display: none; }
@@ -940,6 +1087,27 @@ input:focus-visible {
   .icon-button { width: 36px; height: 36px; }
   .dialogue-screen { padding: 0 14px max(50px, calc(var(--safe-bottom) + 28px)); }
   .dialogue-box { width: 100%; min-height: 124px; padding: 22px 25px 24px 29px; }
+  .dialogue-box--zhou,
+  .dialogue-box--lin {
+    width: 92%;
+    min-height: 132px;
+  }
+  .dialogue-box--zhou {
+    margin-right: 8%;
+    margin-left: 0;
+    padding: 24px 44px 27px 27px;
+  }
+  .dialogue-box--lin {
+    margin-right: 0;
+    margin-left: 8%;
+    padding: 24px 27px 27px 44px;
+  }
+  .dialogue-box--zhou .dialogue-box__line { left: 15px; top: 26px; }
+  .dialogue-box--lin .dialogue-box__line { right: 15px; top: 26px; }
+  .dialogue-box--zhou .dialogue-box__speaker::after,
+  .dialogue-box--lin .dialogue-box__speaker::before { display: none; }
+  .dialogue-box--zhou .dialogue-box__text,
+  .dialogue-box--lin .dialogue-box__text { padding: 0; }
   .dialogue-box__speaker { font-size: 10px; }
   .dialogue-box__text { font-size: clamp(16px, 4.25vw, 19px); line-height: 1.8; }
   .dialogue-box--narration,

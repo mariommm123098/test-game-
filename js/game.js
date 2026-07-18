@@ -281,11 +281,18 @@
       await wait(Math.max(entry.pauseBefore || 250, wasVisible ? 560 : 0));
       if (this.currentScreen !== "dialogue") return;
 
-      this.dialogueBox.classList.remove("dialogue-box--narration", "dialogue-box--action");
+      this.dialogueBox.classList.remove(
+        "dialogue-box--narration",
+        "dialogue-box--action",
+        "dialogue-box--zhou",
+        "dialogue-box--lin"
+      );
       this.speakerName.textContent = entry.speaker || (entry.type === "action" ? "" : "旁白");
       this.dialogueText.textContent = "";
       this.dialogueBox.classList.toggle("dialogue-box--narration", entry.type === "narration");
       this.dialogueBox.classList.toggle("dialogue-box--action", entry.type === "action");
+      this.dialogueBox.classList.toggle("dialogue-box--zhou", entry.type === "dialogue" && entry.speaker === "周屿");
+      this.dialogueBox.classList.toggle("dialogue-box--lin", entry.type === "dialogue" && entry.speaker === "林栀");
       this.dialogueBox.classList.add("dialogue-box--visible");
       this.fullLine = entry.text;
       this.startTypewriter(entry.text);

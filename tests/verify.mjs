@@ -50,7 +50,7 @@ const dialogueRenderer = game.slice(
   game.indexOf("startTypewriter", game.indexOf("async renderDialogue"))
 );
 assert.ok(
-  dialogueRenderer.indexOf("await wait") < dialogueRenderer.indexOf('classList.remove("dialogue-box--narration"'),
+  dialogueRenderer.indexOf("await wait") < dialogueRenderer.indexOf('"dialogue-box--narration"'),
   "Dialogue style classes must remain until the old box has faded out"
 );
 
