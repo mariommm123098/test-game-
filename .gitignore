@@ -1,0 +1,8 @@
+# Local generation and downloadable packaging artifacts
+generated_images/
+*.zip
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/

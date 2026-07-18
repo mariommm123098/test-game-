@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0a1118">
+  <meta name="description" content="《我们都没有说谎》序章：雨停之前——双视角电影化网页互动叙事游戏。">
+  <title>我们都没有说谎｜序章：雨停之前</title>
+  <link rel="preload" href="./assets/images/cinema-rain-PLACEHOLDER.webp" as="image" type="image/webp">
+  <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+  <noscript>本游戏需要启用 JavaScript 才能运行。</noscript>
+
+  <main id="app" class="app is-loading" data-screen="loading">
+    <div id="loadingScreen" class="loading-screen" aria-label="游戏加载中">
+      <div class="loading-mark" aria-hidden="true"><i></i><i></i><i></i></div>
+      <p>正在听见这场雨</p>
+    </div>
+
+    <section id="scene" class="scene scene--title" aria-hidden="true">
+      <img class="scene__image" src="./assets/images/cinema-rain-PLACEHOLDER.webp" alt="暴雨中的旧电影院，两个人隔着一段距离相对而立">
+      <div class="scene__grade"></div>
+      <div class="scene__vignette"></div>
+      <div class="scene__focus scene__focus--zhou"></div>
+      <div class="scene__focus scene__focus--lin"></div>
+      <div class="train-light" aria-hidden="true"></div>
+      <div class="sign-glow" aria-hidden="true"></div>
+      <div class="luggage-ripple" aria-hidden="true"><i></i><i></i></div>
+      <canvas id="rainCanvas" class="rain-canvas" aria-hidden="true"></canvas>
+      <div class="film-grain" aria-hidden="true"></div>
+    </section>
+
+    <div id="flash" class="flash" aria-hidden="true"></div>
+    <div id="curtain" class="curtain curtain--closed" aria-hidden="true"></div>
+
+    <header id="topbar" class="topbar" aria-label="游戏控制">
+      <div class="topbar__chapter">
+        <span>序章</span>
+        <strong>雨停之前</strong>
+      </div>
+      <nav class="topbar__actions">
+        <button id="historyButton" class="icon-button" type="button" aria-label="对话历史" title="对话历史">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5h16M4 10.5h16M4 15.5h10M4 20h7"/></svg>
+        </button>
+        <button id="soundButton" class="icon-button" type="button" aria-label="关闭声音" title="声音开关">
+          <svg class="sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v6h4l5 4V5L9 9H5Z"/><path d="M17 8c1.5 1 2 2.3 2 4s-.5 3-2 4"/></svg>
+          <svg class="sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9v6h4l5 4V5L9 9H5Z"/><path d="m17 9 4 6m0-6-4 6"/></svg>
+        </button>
+        <button id="fullscreenButton" class="icon-button" type="button" aria-label="全屏" title="全屏">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M8 20H4v-4m12 4h4v-4"/></svg>
+        </button>
+        <button id="settingsButton" class="icon-button" type="button" aria-label="设置" title="设置">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1l2-1.5-2-3.4-2.4 1A8 8 0 0 0 14.8 6l-.3-2.6h-4L10.2 6a8 8 0 0 0-1.7 1.1l-2.4-1-2 3.4L6.1 11a7 7 0 0 0 0 2l-2 1.5 2 3.4 2.4-1a8 8 0 0 0 1.7 1.1l.3 2.6h4l.3-2.6a8 8 0 0 0 1.7-1.1l2.4 1 2-3.4-2-1.5a7 7 0 0 0 .1-1Z"/></svg>
+        </button>
+      </nav>
+    </header>
+
+    <section id="titleScreen" class="screen title-screen" aria-labelledby="gameTitle">
+      <div class="title-screen__wash"></div>
+      <div class="title-block">
+        <p class="eyebrow">A STORY ABOUT THE THINGS LEFT UNSAID</p>
+        <h1 id="gameTitle">我们都没有说谎</h1>
+        <p class="title-block__subtitle">我们只是从来没有说出全部。</p>
+        <div class="title-rule" aria-hidden="true"><span></span></div>
+        <div class="title-menu">
+          <button id="startButton" class="menu-button menu-button--primary" type="button"><span>开始游戏</span><i>START</i></button>
+          <button id="continueButton" class="menu-button" type="button" hidden><span>继续游戏</span><i>CONTINUE</i></button>
+          <button id="titleSettingsButton" class="menu-button" type="button"><span>设置</span><i>SETTINGS</i></button>
+        </div>
+        <p id="progressNote" class="progress-note" aria-live="polite"></p>
+        <p class="headphone-note"><span aria-hidden="true">◌</span> 建议佩戴耳机体验</p>
+      </div>
+      <p class="title-screen__version">PROLOGUE / 雨停之前 · v1.0</p>
+    </section>
+
+    <section id="locationCard" class="screen location-card" aria-live="polite" hidden>
+      <div>
+        <p>临江市</p>
+        <time>23:47</time>
+      </div>
+    </section>
+
+    <section id="dialogueScreen" class="screen dialogue-screen" aria-label="剧情对话" hidden>
+      <button id="dialogueAdvance" class="dialogue-hitarea" type="button" aria-label="继续对话"></button>
+      <div id="cinematicCaption" class="cinematic-caption" aria-live="polite"></div>
+      <article id="dialogueBox" class="dialogue-box">
+        <div class="dialogue-box__line"></div>
+        <p id="speakerName" class="dialogue-box__speaker"></p>
+        <p id="dialogueText" class="dialogue-box__text"></p>
+        <span class="dialogue-box__continue" aria-hidden="true"></span>
+      </article>
+      <p class="advance-hint">点击画面 / 空格 / Enter</p>
+    </section>
+
+    <section id="choiceScreen" class="screen choice-screen" aria-labelledby="choiceTitle" hidden>
+      <div class="choice-heading">
+        <p>THE FIRST BELIEF</p>
+        <h2 id="choiceTitle">选择你最先相信的人</h2>
+        <span>移动光标，听见他们各自记住的雨声</span>
+      </div>
+      <div class="perspective-grid">
+        <button class="perspective-card perspective-card--zhou" type="button" data-perspective="zhou">
+          <span class="perspective-card__index">01</span>
+          <span class="perspective-card__texture perspective-card__texture--wave" aria-hidden="true"></span>
+          <span class="perspective-card__missed" aria-hidden="true">03<br><small>MISSED CALLS</small></span>
+          <span class="perspective-card__content">
+            <small>THE SOUND DESIGNER</small>
+            <strong>周屿</strong>
+            <em>有些话，她直到最后都没有告诉我。</em>
+          </span>
+          <span class="perspective-card__status"></span>
+          <span class="perspective-card__enter">相信他的记忆 <b>→</b></span>
+        </button>
+        <div class="choice-divider" aria-hidden="true"><i></i><span>OR</span><i></i></div>
+        <button class="perspective-card perspective-card--lin" type="button" data-perspective="lin">
+          <span class="perspective-card__index">02</span>
+          <span class="perspective-card__texture perspective-card__texture--repair" aria-hidden="true"></span>
+          <span class="perspective-card__document" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="perspective-card__content">
+            <small>THE RESTORER</small>
+            <strong>林栀</strong>
+            <em>有些话，我以为不说才是在保护他。</em>
+          </span>
+          <span class="perspective-card__status"></span>
+          <span class="perspective-card__enter">相信她的沉默 <b>→</b></span>
+        </button>
+      </div>
+    </section>
+
+    <section id="memoryScreen" class="screen memory-screen" aria-live="polite" hidden>
+      <button id="memoryAdvance" class="memory-hitarea" type="button" aria-label="继续回忆"></button>
+      <div id="memoryDecoration" class="memory-decoration" aria-hidden="true"></div>
+      <div class="memory-content">
+        <p id="memoryKicker" class="memory-kicker"></p>
+        <h2 id="memoryTitle" class="memory-title"></h2>
+        <div id="memoryFragments" class="memory-fragments"></div>
+        <blockquote id="innerThought" class="inner-thought"></blockquote>
+      </div>
+      <p class="advance-hint">点击可推进画面</p>
+    </section>
+
+    <section id="intertitleScreen" class="screen intertitle-screen" aria-live="polite" hidden>
+      <p id="intertitleEyebrow"></p>
+      <h2 id="intertitleMain"></h2>
+      <span id="intertitleSub"></span>
+    </section>
+
+    <section id="endingScreen" class="screen ending-screen" aria-labelledby="endingTitle" hidden>
+      <div class="ending-panel">
+        <p class="ending-panel__eyebrow">PROLOGUE COMPLETE</p>
+        <h2 id="endingTitle">序章结束</h2>
+        <div class="ending-panel__route">
+          <span>你最先相信了</span>
+          <strong id="chosenName">—</strong>
+        </div>
+        <p id="truthMessage" class="truth-message" hidden>你看见的都是真的。<br>只是那并不是全部。</p>
+        <div class="ending-actions">
+          <button id="otherPerspectiveButton" class="ending-button ending-button--primary" type="button">重新选择另一视角</button>
+          <button id="returnTitleButton" class="ending-button" type="button">返回标题</button>
+          <button class="ending-button ending-button--locked" type="button" disabled>第一章：敬请期待</button>
+        </div>
+        <div id="routeProgress" class="route-progress" aria-label="视角完成进度">
+          <span data-route="zhou"><i></i>周屿视角</span>
+          <b></b>
+          <span data-route="lin"><i></i>林栀视角</span>
+        </div>
+      </div>
+    </section>
+
+    <dialog id="settingsDialog" class="game-dialog">
+      <form method="dialog" class="dialog-panel">
+        <header><div><span>SETTINGS</span><h2>设置</h2></div><button class="dialog-close" value="close" aria-label="关闭设置">×</button></header>
+        <div class="setting-row setting-row--stack">
+          <div><strong>文字速度</strong><small>调整逐字显示的快慢</small></div>
+          <div class="segmented-control" role="radiogroup" aria-label="文字速度">
+            <label><input type="radio" name="textSpeed" value="52"><span>慢</span></label>
+            <label><input type="radio" name="textSpeed" value="34"><span>标准</span></label>
+            <label><input type="radio" name="textSpeed" value="18"><span>快</span></label>
+          </div>
+        </div>
+        <label class="setting-row"><span><strong>环境音</strong><small>雨、雷声与场景声音</small></span><input id="ambienceToggle" class="switch" type="checkbox"></label>
+        <label class="setting-row"><span><strong>氛围音乐</strong><small>视角选择后的低频声场</small></span><input id="musicToggle" class="switch" type="checkbox"></label>
+        <button id="dialogFullscreenButton" class="setting-action" type="button"><span>进入全屏</span><small>浏览器支持时可用</small></button>
+        <button id="settingsReturnButton" class="setting-action setting-action--danger" type="button"><span>返回标题</span><small>游戏中会先请求确认</small></button>
+        <p class="settings-footnote">声音由浏览器实时合成，不会加载网络音乐。</p>
+      </form>
+    </dialog>
+
+    <dialog id="historyDialog" class="game-dialog history-dialog">
+      <form method="dialog" class="dialog-panel">
+        <header><div><span>RECOLLECTION</span><h2>对话历史</h2></div><button class="dialog-close" value="close" aria-label="关闭历史">×</button></header>
+        <div id="historyList" class="history-list"><p class="history-empty">还没有可以回想的句子。</p></div>
+      </form>
+    </dialog>
+
+    <dialog id="returnDialog" class="game-dialog confirm-dialog">
+      <form method="dialog" class="dialog-panel">
+        <header><div><span>RETURN</span><h2>返回标题？</h2></div></header>
+        <p>当前进度已经自动保存。你可以从标题页继续。</p>
+        <div class="confirm-actions">
+          <button id="confirmReturnButton" class="ending-button ending-button--primary" value="default" type="button">返回标题</button>
+          <button class="ending-button" value="cancel">留在这里</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="liveRegion" class="sr-only" aria-live="polite"></div>
+  </main>
+
+  <script src="./js/story.js"></script>
+  <script src="./js/audio.js"></script>
+  <script src="./js/game.js"></script>
+</body>
+</html>
