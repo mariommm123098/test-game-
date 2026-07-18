@@ -24,6 +24,7 @@ for (const file of requiredFiles) {
 const html = read("index.html");
 const css = read("css/style.css");
 const game = read("js/game.js");
+const audio = read("js/audio.js");
 
 for (const relativePath of [
   "./css/style.css",
@@ -44,6 +45,12 @@ assert.ok(game.includes("localStorage"), "Save system missing");
 assert.ok(game.includes("advanceDialogue"), "Dialogue advance system missing");
 assert.ok(game.includes("choosePerspective"), "Perspective branch handler missing");
 assert.ok(game.includes("replayOtherPerspective"), "Other-perspective replay missing");
+assert.ok(game.includes("scene--cutting"), "Cinematic shot-cut controller missing");
+assert.ok(css.includes("shot-foreground--left"), "Left over-the-shoulder foreground missing");
+assert.ok(css.includes("shot-foreground--right"), "Right over-the-shoulder foreground missing");
+assert.ok(css.includes("scene--luggage"), "Luggage insert shot missing");
+assert.ok(audio.includes("softNoise"), "Soft rain-noise synthesis missing");
+assert.ok(audio.includes("musicFilter"), "Low-frequency score layer missing");
 
 const dialogueRenderer = game.slice(
   game.indexOf("async renderDialogue"),
@@ -64,6 +71,7 @@ assert.equal(story.prologue[2].text, "“你今天来，是想让我留下，还
 assert.equal(story.prologue[4].text, "“我只想知道，我到底有没有资格知道你的人生。”");
 assert.equal(story.prologue[6].text, "“我没有骗过你。”");
 assert.equal(story.prologue[8].text, "“可你也从来没有把真相给我。”");
+assert.equal(story.prologue[8].effect, "zhou", "Final line should hold on Zhou before the train cut");
 assert.equal(story.perspectives.zhou.fragments.length, 4);
 assert.equal(story.perspectives.lin.fragments.length, 4);
 assert.equal(story.intertitles.before.main, "二百一十六天前");

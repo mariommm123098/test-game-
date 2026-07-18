@@ -147,7 +147,7 @@ input:focus-visible {
   object-position: center 53%;
   transform: scale(1.045);
   filter: saturate(0.72) contrast(1.04) brightness(0.83);
-  transition: transform 9s cubic-bezier(0.2, 0.7, 0.2, 1), filter 1.2s ease, opacity 1.2s ease;
+  transition: transform 1.15s cubic-bezier(0.2, 0.72, 0.2, 1), filter 0.5s ease, opacity 0.8s ease;
 }
 
 .scene__grade {
@@ -272,18 +272,132 @@ input:focus-visible {
   filter: saturate(0.7) contrast(1.06) brightness(0.86);
 }
 
-.scene--ground .scene__image {
-  transform: scale(1.12) translateY(-3.5%);
-  object-position: center 64%;
+.shot-foreground,
+.shot-transition {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
-.scene--reveal .scene__image { transform: scale(1.06); }
+.shot-foreground {
+  z-index: 4;
+  opacity: 0;
+  filter: blur(15px);
+  transition: opacity 0.48s ease, transform 0.75s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.shot-foreground--left {
+  width: 36%;
+  right: auto;
+  background:
+    radial-gradient(ellipse 95% 72% at 4% 100%, rgba(2, 7, 11, 0.97) 0 48%, rgba(7, 16, 22, 0.7) 61%, transparent 74%);
+  transform: translateX(-12%);
+}
+
+.shot-foreground--right {
+  width: 36%;
+  right: 0;
+  left: auto;
+  background:
+    radial-gradient(ellipse 95% 72% at 96% 100%, rgba(8, 8, 8, 0.96) 0 48%, rgba(22, 18, 14, 0.68) 61%, transparent 74%);
+  transform: translateX(12%);
+}
+
+.shot-transition {
+  z-index: 6;
+  opacity: 0;
+  background: rgba(4, 9, 13, 0.68);
+  backdrop-filter: blur(0);
+  -webkit-backdrop-filter: blur(0);
+  transition: opacity 0.16s ease, backdrop-filter 0.16s ease;
+}
+
+.scene--cutting .shot-transition {
+  opacity: 0.82;
+  backdrop-filter: blur(11px);
+  -webkit-backdrop-filter: blur(11px);
+}
+
+.scene--cutting .rain-canvas { opacity: 0.28; }
+.scene--cut-in .shot-transition { animation: shotFocusIn 0.48s ease-out both; }
+
+@keyframes shotFocusIn {
+  from { opacity: 0.52; backdrop-filter: blur(8px); }
+  to { opacity: 0; backdrop-filter: blur(0); }
+}
+
+/* 01 / 积水低机位：先看见雨和倒影，再看见两个人。 */
+.scene--ground .scene__image {
+  transform: scale(1.46) translateY(-5%);
+  transform-origin: 50% 86%;
+  filter: saturate(0.58) contrast(1.12) brightness(0.72);
+}
+
+/* 02 / 双人大全景：建立两人之间没有被跨过的距离。 */
+.scene--reveal .scene__image {
+  transform: scale(1.045);
+  transform-origin: 50% 56%;
+  filter: saturate(0.68) contrast(1.06) brightness(0.86);
+}
+
+/* 03 / 周屿过肩中近景：林栀的肩影压在右侧前景。 */
+.scene--zhou .scene__image {
+  transform: scale(1.68);
+  transform-origin: 38% 62%;
+  filter: saturate(0.56) contrast(1.1) brightness(0.78);
+}
+
+.scene--zhou .shot-foreground--right {
+  opacity: 0.88;
+  transform: translateX(2%);
+}
+
+.scene--zhou .scene__grade {
+  background:
+    linear-gradient(90deg, rgba(5, 14, 22, 0.06), transparent 48%, rgba(3, 7, 10, 0.38) 100%),
+    linear-gradient(180deg, rgba(3, 8, 13, 0.18), transparent 60%, rgba(3, 7, 10, 0.38));
+}
+
+/* 04 / 林栀过肩中近景：周屿的肩影压在左侧前景。 */
+.scene--lin .scene__image {
+  transform: scale(1.7);
+  transform-origin: 58% 62%;
+  filter: saturate(0.64) contrast(1.05) brightness(0.8) sepia(0.04);
+}
+
+.scene--lin .shot-foreground--left {
+  opacity: 0.9;
+  transform: translateX(-2%);
+}
+
+.scene--lin .scene__grade {
+  background:
+    linear-gradient(270deg, rgba(33, 27, 20, 0.05), transparent 48%, rgba(3, 7, 10, 0.4) 100%),
+    linear-gradient(180deg, rgba(3, 8, 13, 0.16), transparent 60%, rgba(3, 7, 10, 0.36));
+}
+
+/* 05 / 插入镜头：拉杆、手指与轮边积水。 */
+.scene--luggage .scene__image {
+  transform: scale(2.18) translate(-1%, -1%);
+  transform-origin: 59% 75%;
+  filter: saturate(0.48) contrast(1.15) brightness(0.7);
+}
+
+.scene--luggage .scene__grade {
+  background: linear-gradient(180deg, rgba(3, 7, 10, 0.35), transparent 45%, rgba(2, 6, 9, 0.16));
+}
+
+.scene--train .scene__image {
+  transform: scale(1.08);
+  transform-origin: 70% 56%;
+  filter: saturate(0.58) contrast(1.08) brightness(0.7);
+}
+
 .scene--zhou .scene__focus--zhou,
 .scene--peek-zhou .scene__focus--zhou { opacity: 1; }
 .scene--lin .scene__focus--lin,
 .scene--peek-lin .scene__focus--lin { opacity: 1; }
 .scene--luggage .luggage-ripple { opacity: 1; }
-.scene--luggage .scene__image { transform: scale(1.115) translate(-2%, -1.2%); }
 .scene--train .train-light { opacity: 1; transform: scale(2.1) translateX(-75vw); box-shadow: 0 0 25px 8px rgba(246, 214, 145, 0.65), 0 0 90px 25px rgba(222, 174, 90, 0.25); }
 .scene--frozen .scene__image { filter: saturate(0.55) contrast(1.08) brightness(0.72); }
 .scene--frozen .rain-canvas { opacity: 1; }

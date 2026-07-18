@@ -71,7 +71,7 @@ window.STORY = Object.freeze({
       text: "“可你也从来没有把真相给我。”",
       pauseBefore: 900,
       afterHold: 1200,
-      effect: "train"
+      effect: "zhou"
     }
   ],
 

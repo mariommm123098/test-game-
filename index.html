@@ -7,7 +7,7 @@
   <meta name="description" content="《我们都没有说谎》序章：雨停之前——双视角电影化网页互动叙事游戏。">
   <title>我们都没有说谎｜序章：雨停之前</title>
   <link rel="preload" href="./assets/images/cinema-rain-PLACEHOLDER.webp" as="image" type="image/webp">
-  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/style.css?v=1.2.0">
 </head>
 <body>
   <noscript>本游戏需要启用 JavaScript 才能运行。</noscript>
@@ -24,10 +24,13 @@
       <div class="scene__vignette"></div>
       <div class="scene__focus scene__focus--zhou"></div>
       <div class="scene__focus scene__focus--lin"></div>
+      <div class="shot-foreground shot-foreground--left" aria-hidden="true"></div>
+      <div class="shot-foreground shot-foreground--right" aria-hidden="true"></div>
       <div class="train-light" aria-hidden="true"></div>
       <div class="sign-glow" aria-hidden="true"></div>
       <div class="luggage-ripple" aria-hidden="true"><i></i><i></i></div>
       <canvas id="rainCanvas" class="rain-canvas" aria-hidden="true"></canvas>
+      <div class="shot-transition" aria-hidden="true"></div>
       <div class="film-grain" aria-hidden="true"></div>
     </section>
 
@@ -71,7 +74,7 @@
         <p id="progressNote" class="progress-note" aria-live="polite"></p>
         <p class="headphone-note"><span aria-hidden="true">◌</span> 建议佩戴耳机体验</p>
       </div>
-      <p class="title-screen__version">PROLOGUE / 雨停之前 · v1.0</p>
+      <p class="title-screen__version">PROLOGUE / 雨停之前 · v1.2</p>
     </section>
 
     <section id="locationCard" class="screen location-card" aria-live="polite" hidden>
@@ -209,8 +212,8 @@
     <div id="liveRegion" class="sr-only" aria-live="polite"></div>
   </main>
 
-  <script src="./js/story.js"></script>
-  <script src="./js/audio.js"></script>
-  <script src="./js/game.js?v=1.1.0"></script>
+  <script src="./js/story.js?v=1.2.0"></script>
+  <script src="./js/audio.js?v=1.2.0"></script>
+  <script src="./js/game.js?v=1.2.0"></script>
 </body>
 </html>

@@ -87,6 +87,9 @@
       this.lastInputAt = 0;
       this.memoryResolver = null;
       this.memoryLastAdvance = 0;
+      this.currentShot = null;
+      this.shotToken = 0;
+      this.shotTimer = null;
       this.currentScreen = "loading";
       this.save = this.loadSave();
       this.audio = new GameAudio(this.save.settings);
@@ -262,6 +265,7 @@
     beginDialogue(index) {
       this.showOnly(this.dialogueScreen, "dialogue");
       this.scene.className = "scene scene--game scene--ground";
+      this.currentShot = "ground";
       this.dialogueIndex = index;
       this.renderDialogue(STORY.prologue[this.dialogueIndex]);
     }
@@ -277,8 +281,11 @@
       // 造成玩家看到的“一闪而过的矩形框”。
       this.dialogueBox.classList.remove("dialogue-box--visible");
       this.caption.classList.remove("cinematic-caption--visible");
-      this.applyEffect(entry.effect);
-      await wait(Math.max(entry.pauseBefore || 250, wasVisible ? 560 : 0));
+      const shotChange = this.applyEffect(entry.effect);
+      await Promise.all([
+        wait(Math.max(entry.pauseBefore || 250, wasVisible ? 560 : 0)),
+        shotChange
+      ]);
       if (this.currentScreen !== "dialogue") return;
 
       this.dialogueBox.classList.remove(
@@ -353,17 +360,48 @@
     async finishDialogue() {
       this.clearTyping();
       this.dialogueBox.classList.remove("dialogue-box--visible");
-      this.scene.classList.add("scene--frozen", "scene--train");
-      this.audio.playCue("train");
       this.locked = true;
+      // 最后一句留在周屿的肩后近景；对白消失后再切到火车远光，
+      // 让火车成为一个独立的句号，而不是和对白同时亮起的特效。
+      await this.applyEffect("train");
+      this.scene.classList.add("scene--frozen");
+      this.audio.playCue("train");
       await wait(3800);
       this.locked = false;
       this.showChoice();
     }
 
-    applyEffect(effect) {
-      this.scene.classList.remove("scene--ground", "scene--reveal", "scene--zhou", "scene--lin", "scene--luggage", "scene--train", "scene--frozen");
-      if (effect) this.scene.classList.add(`scene--${effect}`);
+    async applyEffect(effect) {
+      if (!effect) return;
+      const token = ++this.shotToken;
+      const isNewShot = this.currentShot !== effect;
+
+      if (isNewShot) {
+        // 170ms 的前景遮切模拟摄影机经过人物肩部，避免 PPT 式直接缩放。
+        this.scene.classList.add("scene--cutting");
+        await wait(170);
+        if (token !== this.shotToken) return;
+
+        this.scene.classList.remove(
+          "scene--ground",
+          "scene--reveal",
+          "scene--zhou",
+          "scene--lin",
+          "scene--luggage",
+          "scene--train",
+          "scene--frozen",
+          "scene--cut-in"
+        );
+        this.scene.classList.add(`scene--${effect}`);
+        this.currentShot = effect;
+        this.scene.classList.remove("scene--cutting");
+        // 只让焦点重新落下一次，不反复做显眼的推拉动画。
+        void this.scene.offsetWidth;
+        this.scene.classList.add("scene--cut-in");
+        clearTimeout(this.shotTimer);
+        this.shotTimer = setTimeout(() => this.scene.classList.remove("scene--cut-in"), 520);
+      }
+
       if (effect === "luggage") this.audio.playCue("luggage");
       if (effect === "train") setTimeout(() => this.flashLightning(), 900);
     }
