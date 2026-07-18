@@ -45,6 +45,15 @@ assert.ok(game.includes("advanceDialogue"), "Dialogue advance system missing");
 assert.ok(game.includes("choosePerspective"), "Perspective branch handler missing");
 assert.ok(game.includes("replayOtherPerspective"), "Other-perspective replay missing");
 
+const dialogueRenderer = game.slice(
+  game.indexOf("async renderDialogue"),
+  game.indexOf("startTypewriter", game.indexOf("async renderDialogue"))
+);
+assert.ok(
+  dialogueRenderer.indexOf("await wait") < dialogueRenderer.indexOf('classList.remove("dialogue-box--narration"'),
+  "Dialogue style classes must remain until the old box has faded out"
+);
+
 const context = { window: {} };
 vm.createContext(context);
 vm.runInContext(read("js/story.js"), context);
