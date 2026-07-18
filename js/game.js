@@ -270,12 +270,18 @@
       if (!entry) return this.finishDialogue();
       this.clearTyping();
       this.locked = true;
-      this.dialogueBox.classList.remove("dialogue-box--visible", "dialogue-box--narration", "dialogue-box--action");
+      const wasVisible = this.dialogueBox.classList.contains("dialogue-box--visible");
+
+      // 先保留当前框体类型完成淡出，再切换旁白/动作/对白样式。
+      // 如果过早移除类型类，半透明框会在淡出途中短暂恢复成实体对白框，
+      // 造成玩家看到的“一闪而过的矩形框”。
+      this.dialogueBox.classList.remove("dialogue-box--visible");
       this.caption.classList.remove("cinematic-caption--visible");
       this.applyEffect(entry.effect);
-      await wait(entry.pauseBefore || 250);
+      await wait(Math.max(entry.pauseBefore || 250, wasVisible ? 560 : 0));
       if (this.currentScreen !== "dialogue") return;
 
+      this.dialogueBox.classList.remove("dialogue-box--narration", "dialogue-box--action");
       this.speakerName.textContent = entry.speaker || (entry.type === "action" ? "" : "旁白");
       this.dialogueText.textContent = "";
       this.dialogueBox.classList.toggle("dialogue-box--narration", entry.type === "narration");
