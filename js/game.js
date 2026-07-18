@@ -88,7 +88,6 @@
       this.memoryResolver = null;
       this.memoryLastAdvance = 0;
       this.currentShot = null;
-      this.shotToken = 0;
       this.shotTimer = null;
       this.currentScreen = "loading";
       this.save = this.loadSave();
@@ -373,15 +372,11 @@
 
     async applyEffect(effect) {
       if (!effect) return;
-      const token = ++this.shotToken;
       const isNewShot = this.currentShot !== effect;
 
       if (isNewShot) {
-        // 170ms 的前景遮切模拟摄影机经过人物肩部，避免 PPT 式直接缩放。
-        this.scene.classList.add("scene--cutting");
-        await wait(170);
-        if (token !== this.shotToken) return;
-
+        // 直接让上一构图连续运动到下一构图。雨层始终可见，
+        // 不再使用暗色遮罩或强制重排，因此不会产生闪黑与“卡一下”的错觉。
         this.scene.classList.remove(
           "scene--ground",
           "scene--reveal",
@@ -390,16 +385,13 @@
           "scene--luggage",
           "scene--train",
           "scene--frozen",
-          "scene--cut-in"
+          "scene--camera-moving"
         );
         this.scene.classList.add(`scene--${effect}`);
+        this.scene.classList.add("scene--camera-moving");
         this.currentShot = effect;
-        this.scene.classList.remove("scene--cutting");
-        // 只让焦点重新落下一次，不反复做显眼的推拉动画。
-        void this.scene.offsetWidth;
-        this.scene.classList.add("scene--cut-in");
         clearTimeout(this.shotTimer);
-        this.shotTimer = setTimeout(() => this.scene.classList.remove("scene--cut-in"), 520);
+        this.shotTimer = setTimeout(() => this.scene.classList.remove("scene--camera-moving"), 1380);
       }
 
       if (effect === "luggage") this.audio.playCue("luggage");
